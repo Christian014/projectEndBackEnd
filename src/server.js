@@ -1,14 +1,21 @@
+const knexFile = require("../knexfile")
+const knex = require("knex")(knexFile.development);
+
 //para tratar exessoes, errors
 require("express-async-errors");
 
 const AppError = require("../src/utils/appError");
+const passwordCrypto = require("../src/services/bcrypt/index")
 
 const User = require("./controllers/controllersUser");
 const userController = new User();
 
 const express = require ("express");
 const cors = require("cors");
+
+
 const app = express();
+
 
 app.use(cors());
 app.use(express.json());
@@ -48,6 +55,28 @@ app.post("/register", async(req, res) => {
         res.status(500).send('Erro ao criar usuário');
     }
 });
+
+app.post("/login", async(req, res) => {
+    try{
+        const {email, password} = req.body
+        const user = await knex("users").where("email", email)
+        const passwordUser = user[0].password
+        console.log(passwordUser)
+
+        const emailDb = await knex("users").pluck("email");
+
+        if(emailDb.includes(email)){
+            return console.log("email existente no banco de dados")
+        }else{
+            return console.log("não existe")
+        }
+
+
+       
+    }catch{
+        return new AppError("error", 500)
+    }
+})
 
 app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`)
