@@ -1,3 +1,5 @@
+require("express-async-errors");
+
 class AppError{
     message;
     statuscode;
@@ -6,7 +8,6 @@ class AppError{
         this.message = message;
         this.statuscode = statuscode;
     }
-
     
 }
 

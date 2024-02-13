@@ -1,20 +1,20 @@
+require("express-async-errors");
 const knexFile = require("../knexfile")
 const knex = require("knex")(knexFile.development);
-
-//para tratar exessoes, errors
-require("express-async-errors");
+const bcrypt = require("bcrypt");
+const authConfig = require("./config/jwt/auth");
+const { sign } = require("jsonwebtoken");
 
 const AppError = require("../src/utils/appError");
-const passwordCrypto = require("../src/services/bcrypt/index")
 
-const User = require("./controllers/controllersUser");
-const userController = new User();
+const createUser = require("./controllers/controllersUser");
 
 const express = require ("express");
 const cors = require("cors");
 
 
 const app = express();
+
 
 
 app.use(cors());
@@ -45,36 +45,36 @@ app.get("/", (req, res) => {
     res.send(`api rodando na porta: ${PORT}`)
 });
 
-app.post("/register", async(req, res) => {
-    try{
-        const {name, email, password } = req.body;
-        await userController.createUser({ body: { name, email, password } }, res);
-        res.status(201).send('Usuário criado com sucesso');
-    }catch (error) {
-        console.error(error); // Imprime o erro no console
-        res.status(500).send('Erro ao criar usuário');
-    }
-});
+app.post("/register",(req) => {createUser(req)});
 
 app.post("/login", async(req, res) => {
     try{
         const {email, password} = req.body
         const user = await knex("users").where("email", email)
-        const passwordUser = user[0].password
-        console.log(passwordUser)
 
-        const emailDb = await knex("users").pluck("email");
-
-        if(emailDb.includes(email)){
-            return console.log("email existente no banco de dados")
-        }else{
-            return console.log("não existe")
+        if(!user || []){
+            throw new AppError("email e/ou senha invalido", 401)
         }
 
+        const emailUser = user[0].email
+        const passwordUser = user[0].password
+    
 
+       const passwordIsCorrect = await bcrypt.compare(password, passwordUser);
+       console.log(passwordIsCorrect)
+       console.log(emailUser.includes(email))
+
+        
+        if(passwordIsCorrect && emailUser.includes(email)){
+            console.log("login")
+        }else{
+            console.log("nadad e login pra vc")
+        }
+
+        return console.log("login sucess")
        
     }catch{
-        return new AppError("error", 500)
+        
     }
 })
 
