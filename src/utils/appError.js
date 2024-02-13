@@ -1,5 +1,3 @@
-require("express-async-errors");
-
 class AppError{
     message;
     statuscode;
