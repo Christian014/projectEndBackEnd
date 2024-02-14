@@ -17,16 +17,13 @@ class UserController {
 
                 const {name, email, password} =  req.body;
             
-                const emailExistDb = await knex("users").pluck("email", email)
-                
-                console.log(emailExistDb)
-                console.log(email)
-            
-                if(emailExistDb.includes(email)){
-                    throw new AppError("Email ja está sendo utilizado", 401)
-                }else{
-                    
-                    const passwordcrypto = await passwordCrypto(password) 
+                const emailExistDb = await knex("users").where("email", email).first()
+
+                if(emailExistDb){
+                    throw new AppError("email ja esta sendo ultilizado", 401);
+                }
+
+                const passwordcrypto = await passwordCrypto(password) 
                     
                     const user = await knex("users")
                     .insert
@@ -36,13 +33,19 @@ class UserController {
                         password: passwordcrypto
 
                     })
+                    return res.status(200).json({ message: "Usuário criado com sucesso" });
 
-                    return res.status(200).json({user})
-                        
+                    
+
+            }catch (error) {
+    
+                if (error.message.includes("O email já está em uso")) {
+                    return res.status(401).json({ message: "O email já está em uso" });
+                } else {
+
+                    console.error(error);
+                    return res.status(500).json({ message: "Erro interno do servidor" });
                 }
-
-            }catch{
-                    res.status(401).json({message: "email ja está sendo utilizado"})
             }
             
     
@@ -62,6 +65,7 @@ class UserController {
                     const passwordIsCorrect = await bcrypt.compare(password, passwordUser);
                     
                     if(!passwordIsCorrect){
+                        console.log("Email e/ou senha inválido")
                         throw new AppError("Email e/ou senha inválido", 401);
                     }
 
@@ -71,7 +75,7 @@ class UserController {
                         subject: String(user.id),
                         expiresIn
                     })
-
+                    console.log(user, token);
                     return res.json({user, token});
 
                 }catch{
