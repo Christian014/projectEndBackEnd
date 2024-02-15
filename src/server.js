@@ -1,15 +1,17 @@
 require("express-async-errors");
 const AppError = require("../src/utils/appError");
-
-const createUser = require("./controllers/controllersUser");
-const loginUser = require("./controllers/controllersUser").loginUser;
-
+const ensureAuthenticated = require("./middlewares/ensureAuthenticated");
+const uploadConfig = require("./config/upload")
 const UserController = require("./controllers/controllersUser");
 const userController = new UserController()
+const multer = require("multer");
+const ControllerDish = require("./controllers/controllerDish");
+const controllerDish = new ControllerDish()
 
+
+const upload = multer(uploadConfig.MULTER)
 const express = require ("express");
 const cors = require("cors");
-
 const app = express();
 
 app.use(cors());
@@ -32,13 +34,13 @@ app.use((error, req, res, next) => {
 });
 
 const PORT = 3333;
-
 app.get("/", (req, res) => {
     res.send(`api rodando na porta: ${PORT}`)
 });
 
 app.post("/register",(req, res) => {userController.createUser(req, res)});
-
 app.post("/login", (req, res) => {userController.loginUser(req, res)});
+
+app.patch("/dish", ensureAuthenticated, upload.single("dish"), controllerDish.create)
 
 app.listen(PORT);
