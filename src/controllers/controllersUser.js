@@ -16,6 +16,7 @@ class UserController {
             try{
 
                 const {name, email, password} =  req.body;
+                console.log(name, email, password)
             
                 const emailExistDb = await knex("users").where("email", email).first()
 

@@ -1,6 +1,7 @@
 require("express-async-errors");
 const AppError = require("../src/utils/appError");
 const ensureAuthenticated = require("./middlewares/ensureAuthenticated");
+
 const uploadConfig = require("./config/upload")
 const UserController = require("./controllers/controllersUser");
 const userController = new UserController()
@@ -41,6 +42,6 @@ app.get("/", (req, res) => {
 app.post("/register",(req, res) => {userController.createUser(req, res)});
 app.post("/login", (req, res) => {userController.loginUser(req, res)});
 
-app.patch("/dish", ensureAuthenticated, upload.single("dish"), controllerDish.create)
+app.post("/dish", upload.single("image"), controllerDish.create)
 
 app.listen(PORT);
