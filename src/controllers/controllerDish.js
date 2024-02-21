@@ -34,6 +34,10 @@ class ControllerDish{
             console.log(error)
         }
     }
+
+    async getAll(req, res){
+        const dataDishes = await knex.select("*").from("dish")
+    }
 }
 
 module.exports = ControllerDish;

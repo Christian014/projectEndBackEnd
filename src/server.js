@@ -43,5 +43,6 @@ app.post("/register",(req, res) => {userController.createUser(req, res)});
 app.post("/login", (req, res) => {userController.loginUser(req, res)});
 
 app.post("/dish", upload.single("image"), controllerDish.create)
+app.get("/dish", controllerDish.getAll)
 
 app.listen(PORT);
