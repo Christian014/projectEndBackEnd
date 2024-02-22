@@ -36,7 +36,16 @@ class ControllerDish{
     }
 
     async getAll(req, res){
-        const dataDishes = await knex.select("*").from("dish")
+        try{
+            const dataDishes = await knex.select("*").from("dish")
+            console.log(dataDishes)
+
+            return res.json(dataDishes)
+        }catch{
+            console.log("error internal")
+        }
+
+        
     }
 }
 
