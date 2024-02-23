@@ -7,7 +7,9 @@ const UserController = require("./controllers/controllersUser");
 const userController = new UserController()
 const multer = require("multer");
 const ControllerDish = require("./controllers/controllerDish");
-const controllerDish = new ControllerDish()
+const controllerDish = new ControllerDish();
+const ControllerPreViewDish = require("./controllers/controllerPreviewDish");
+const controllerPreViewDish = new ControllerPreViewDish();
 
 
 const upload = multer(uploadConfig.MULTER)
@@ -43,7 +45,9 @@ app.get("/", (req, res) => {
 app.post("/register",(req, res) => {userController.createUser(req, res)});
 app.post("/login", (req, res) => {userController.loginUser(req, res)});
 
-app.post("/dish", upload.single("image"), controllerDish.create)
-app.get("/dish", controllerDish.getAll)
+app.post("/dish", upload.single("image"), controllerDish.create);
+app.get("/dish", controllerDish.getAll);
+
+app.post("/dishPreView", controllerPreViewDish.previewDish);
 
 app.listen(PORT);
