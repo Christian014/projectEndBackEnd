@@ -47,6 +47,22 @@ class ControllerDish{
 
         
     }
+
+    async update(req, res){
+        try{
+            const { id } = req.body
+
+            const { image, name, description, price, ingredients} = req.body
+
+            const data = await knex("dish").where("id", id)
+            .update()
+            
+
+            console.log(data)
+        }catch{
+            console.log("error")
+        }
+    }
 }
 
 module.exports = ControllerDish;
