@@ -51,16 +51,45 @@ class ControllerDish{
     async update(req, res){
         try{
             const { id } = req.body
-
-            const { image, name, description, price, ingredients} = req.body
-
-            const data = await knex("dish").where("id", id)
-            .update()
+            const { name, description, price, ingredients, category} = req.body
             
 
-            console.log(data)
-        }catch{
-            console.log("error")
+            if (!req.file) {
+                console.log("nenhum arquivo");
+            }
+            
+            const fileName = req.file.filename
+            const diskStorage = new DiskStorage()
+            
+            const savedFilename = await diskStorage.saveFile(fileName)
+            
+
+            const data = await knex("dish").where("id", id)
+            .update({
+                image: savedFilename,
+                name: name,
+                category: category,
+                description: description,
+                price: price,
+                ingredients: ingredients
+            })
+
+            return res.status(200);
+            
+        }catch(error){
+            console.log(error, "error")
+        }
+    }
+
+    async delete(req, res){
+        try{
+            const { id }  = req.params
+            await knex("dish").where("id", id).delete()
+
+            res.status(200)
+            
+        }catch(erro){
+            console.log(erro, "erro")
         }
     }
 }
