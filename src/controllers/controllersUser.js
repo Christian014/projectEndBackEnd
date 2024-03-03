@@ -57,9 +57,16 @@ class UserController {
                 try{
                     const {email, password} = req.body
                     const user = await knex("users").where("email", email).first()
+                    
 
                     if(!user || user === 0){
                         throw new AppError("Email e/ou senha inválido", 401)
+                    }
+
+                    if(user.autenticacao == "admin"){
+                        console.log("usuario admin");
+                    }else{
+                        console.log("usuario comun")
                     }
                     
                     const passwordUser = user.password       
@@ -76,7 +83,7 @@ class UserController {
                         subject: String(user.id),
                         expiresIn
                     })
-                    console.log(user, token);
+                    
                     return res.json({user, token});
 
                 }catch{

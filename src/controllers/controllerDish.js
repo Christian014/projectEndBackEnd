@@ -53,7 +53,7 @@ class ControllerDish{
             const { id } = req.body
             const { name, description, price, ingredients, category} = req.body
             
-
+            console.log(ingredients)
             if (!req.file) {
                 console.log("nenhum arquivo");
             }
@@ -74,6 +74,7 @@ class ControllerDish{
                 ingredients: ingredients
             })
 
+            console.log(data.data)
             return res.status(200);
             
         }catch(error){

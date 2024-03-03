@@ -8,6 +8,7 @@ exports.up = function(knex) {
         table.string("name");
         table.string("email");
         table.string("password");
+        table.string("autenticacao").defaultTo("user")
     })
 };
 
