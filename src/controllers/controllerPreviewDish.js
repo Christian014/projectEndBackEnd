@@ -18,6 +18,7 @@ class ControllerPreViewDish{
 
     async previewDishAllRequest(req, res){
         try{
+            console.log("caiu")
             const { idPedido } = req.body
             const response = await knex("dish").whereIn("id", idPedido);
 
