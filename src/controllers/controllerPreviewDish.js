@@ -22,7 +22,7 @@ class ControllerPreViewDish{
             const { idPedido } = req.body
             const response = await knex("dish").whereIn("id", idPedido);
 
-            return res.json({response})
+            res.json({response})
         }catch{
             res.json("error")
         }
