@@ -51,5 +51,6 @@ app.put("/dish", ensureAuthenticated, upload.single("image"), controllerDish.upd
 app.delete("/dish/:id", ensureAuthenticated, controllerDish.delete);
 
 app.post("/dishPreView", controllerPreViewDish.previewDish);
+app.post("/dishRequest", controllerPreViewDish.requestDish);
 
 app.listen(PORT);

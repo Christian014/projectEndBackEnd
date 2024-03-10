@@ -16,6 +16,19 @@ class ControllerPreViewDish{
             res.json("error")
         }
     }
+
+    async requestDish(req, res){
+        console.log("oi cheguei")
+        try{
+            const { idPedido } = req.body
+            console.log(idPedido)
+            const response = await knex("dish").whereIn("id", idPedido);
+
+            return res.json({response})
+        }catch{
+            res.json("error")
+        }
+    }
 }
 
 module.exports = ControllerPreViewDish
