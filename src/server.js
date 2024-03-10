@@ -45,9 +45,9 @@ app.get("/", (req, res) => {
 app.post("/register",(req, res) => {userController.createUser(req, res)});
 app.post("/login", (req, res) => {userController.loginUser(req, res)});
 
-app.post("/dish", upload.single("image"), controllerDish.create);
+app.post("/dish", ensureAuthenticated, upload.single("image"), controllerDish.create);
 app.get("/dish", controllerDish.getAll);
-app.put("/dish", upload.single("image"), controllerDish.update);
+app.put("/dish", ensureAuthenticated, upload.single("image"), controllerDish.update);
 app.delete("/dish/:id", controllerDish.delete);
 
 app.post("/dishPreView", controllerPreViewDish.previewDish);
