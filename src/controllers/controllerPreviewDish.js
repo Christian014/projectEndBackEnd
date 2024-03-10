@@ -8,6 +8,7 @@ class ControllerPreViewDish{
     async previewDish(req, res){
         try{
             const { id } = req.body
+            console.log(id)
             const response = await knex("dish").where("id", id).first();
 
             return res.json({response})
