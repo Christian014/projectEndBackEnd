@@ -51,5 +51,6 @@ app.put("/dish", upload.single("image"), controllerDish.update);
 app.delete("/dish/:id", controllerDish.delete);
 
 app.post("/dishPreView", controllerPreViewDish.previewDish);
+app.post("/dishPreView", controllerPreViewDish.previewDishAllRequest);
 
 app.listen(PORT);
