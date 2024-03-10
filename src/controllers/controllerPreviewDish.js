@@ -15,18 +15,7 @@ class ControllerPreViewDish{
             res.json("error")
         }
     }
-
-    async previewDishAllRequest(req, res){
-        try{
-            console.log("caiu")
-            const { idPedido } = req.body
-            const response = await knex("dish").whereIn("id", idPedido);
-
-            res.json({response})
-        }catch{
-            res.json("error")
-        }
-    }
+    
 }
 
 module.exports = ControllerPreViewDish
