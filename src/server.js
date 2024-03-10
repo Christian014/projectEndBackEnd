@@ -11,6 +11,9 @@ const controllerDish = new ControllerDish();
 const ControllerPreViewDish = require("./controllers/controllerPreviewDish");
 const controllerPreViewDish = new ControllerPreViewDish();
 
+const ControllerRequestDish = require("./controllers/controllerRequestDish");
+const controllerRequestDish = new ControllerRequestDish();
+
 
 const upload = multer(uploadConfig.MULTER)
 const express = require ("express");
@@ -51,5 +54,6 @@ app.put("/dish", upload.single("image"), controllerDish.update);
 app.delete("/dish/:id", controllerDish.delete);
 
 app.post("/dishPreView", controllerPreViewDish.previewDish);
+app.post("/dishRequest", controllerRequestDish.requestDish);
 
 app.listen(PORT);
